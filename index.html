@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Raio-X OAB 1ª Fase</title>
+<meta name="description" content="Estudo estatístico das 15 últimas provas da 1ª fase da OAB (33º ao 47º Exame): peso por matéria, tópicos mais cobrados, temas repetidos e banco com as 1.200 questões.">
+<meta property="og:title" content="Raio-X OAB 1ª Fase">
+<meta property="og:description" content="Incidência de matérias e tópicos nas 15 últimas provas da 1ª fase da OAB.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --font-anthropic-sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-anthropic-serif:"Source Serif 4",Georgia,serif;
+  --color-fg:#1f1e1c;--color-fg-muted:#6b6862;--color-bg:#faf9f6;--color-panel:#ffffff;--color-border-line:#e6e3dc;
+  --color-bad:#c0392b;--color-ok:#2e7d4f;--color-warn:#b7791f;
+  --cds-gap-xs:4px;--cds-gap-sm:8px;--cds-gap-md:16px;--cds-gap-lg:24px;--cds-gap-xl:36px;
+  --cds-pad-xs:6px;--cds-pad-sm:10px;--cds-pad-lg:20px;--cds-radius:10px;
+  --cds-font-size-caption:13px;--cds-font-size-body:15px;--cds-font-size-heading:19px;--cds-font-size-title:34px;
+  --cds-font-weight-medium:600;
+  --cds-surface-popover:#ffffff;--cds-border:#dcd8cf;--cds-shadow-popover:0 6px 24px rgba(0,0,0,.12);--cds-text-secondary:#6b6862;
+  --cds-chart-muted:#b9b4aa;--cds-chart-grid:#ece9e2;--cds-chart-reference:#8c877d;--cds-chart-axis:#cfcac0;
+  --cds-dur-slow:300ms;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --color-fg:#ecebe7;--color-fg-muted:#a29f98;--color-bg:#161615;--color-panel:#201f1d;--color-border-line:#33322f;
+    --color-bad:#e5675a;--color-ok:#5cbf86;--color-warn:#e0b04a;
+    --cds-surface-popover:#2a2927;--cds-border:#3d3b38;--cds-shadow-popover:0 6px 24px rgba(0,0,0,.5);--cds-text-secondary:#a29f98;
+    --cds-chart-muted:#5e5b55;--cds-chart-grid:#2c2b28;--cds-chart-reference:#8c877d;--cds-chart-axis:#45433f;
+    color-scheme:dark;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--color-bg);color:var(--color-fg);font-family:var(--font-anthropic-sans);-webkit-font-smoothing:antialiased}
+#dash-root{padding:32px clamp(16px,4vw,48px) 48px}
+.dash-skeleton{color:transparent!important;background:linear-gradient(90deg,var(--color-border-line),var(--cds-chart-grid),var(--color-border-line));background-size:200% 100%;border-radius:6px;animation:sk 1.4s linear infinite}
+@keyframes sk{to{background-position:-200% 0}}
+footer.site{max-width:84rem;margin:40px auto 0;font-size:13px;color:var(--color-fg-muted);border-top:1px solid var(--color-border-line);padding-top:16px;line-height:1.5}
+</style>
+<style>
+.ox{font-family:var(--font-anthropic-sans);color:var(--color-fg);display:flex;flex-direction:column;gap:var(--cds-gap-xl);max-width:84rem;margin-inline:auto}
+.ox h1{font-family:var(--font-anthropic-serif);font-weight:400;font-size:var(--cds-font-size-title);margin:0;line-height:1.2}
+.ox .lead{color:var(--color-fg-muted);font-size:var(--cds-font-size-body);margin:var(--cds-gap-sm) 0 0;max-width:62rem;line-height:1.5}
+.ox .lead b,.ox .lead strong{font-weight:600;color:var(--color-fg)}
+.ox .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,9.5rem),1fr));gap:var(--cds-gap-md)}
+.ox .card{background:var(--color-panel);border:1px solid var(--color-border-line);border-radius:var(--cds-radius);padding:var(--cds-pad-lg);min-width:0}
+.ox .kpi .v{font-family:var(--font-anthropic-serif);font-weight:400;font-size:var(--cds-font-size-title);font-variant-numeric:tabular-nums;line-height:1.1;margin-top:var(--cds-gap-xs)}
+.ox .lbl{color:var(--color-fg-muted);font-size:var(--cds-font-size-caption);line-height:1.4}
+.ox .sec{display:flex;flex-direction:column;gap:var(--cds-gap-md)}
+.ox .sec>h2{font-size:var(--cds-font-size-heading);font-weight:var(--cds-font-weight-medium);margin:0}
+.ox .sec>p{margin:0;color:var(--color-fg-muted);font-size:var(--cds-font-size-body);max-width:62rem;line-height:1.5}
+.ox .card h3{font-size:var(--cds-font-size-body);font-weight:var(--cds-font-weight-medium);margin:0 0 var(--cds-gap-xs)}
+.ox .note{color:var(--color-fg-muted);font-size:var(--cds-font-size-caption);margin:0 0 var(--cds-gap-md);line-height:1.4}
+.ox .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,28rem),1fr));gap:var(--cds-gap-md)}
+.ox .chart{position:relative;min-height:120px}
+.ox .chart.dash-skeleton{min-height:320px}
+.ox .tip{position:absolute;z-index:5;pointer-events:none;background:var(--cds-surface-popover);border:1px solid var(--cds-border);border-radius:var(--cds-radius);box-shadow:var(--cds-shadow-popover);padding:var(--cds-pad-xs) var(--cds-pad-sm);font-size:var(--cds-font-size-caption);max-width:18rem;line-height:1.4}
+.ox .tip .th{color:var(--cds-text-secondary)}
+.ox .legend{display:flex;flex-wrap:wrap;gap:var(--cds-gap-md);font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);margin-bottom:var(--cds-gap-sm)}
+.ox .legend span{display:inline-flex;align-items:center;gap:6px}
+.ox .legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.ox .controls{display:flex;flex-wrap:wrap;gap:var(--cds-gap-sm);align-items:center;margin-bottom:var(--cds-gap-md)}
+.ox select,.ox input[type=search]{font:inherit;font-size:var(--cds-font-size-caption);color:var(--color-fg);background:var(--color-bg);border:1px solid var(--color-border-line);border-radius:var(--cds-radius);padding:6px 8px;min-width:0}
+.ox input[type=search]{flex:1 1 14rem}
+.ox button.chip{font:inherit;font-size:var(--cds-font-size-caption);color:var(--color-fg);background:var(--color-bg);border:1px solid var(--color-border-line);border-radius:999px;padding:4px 10px;cursor:pointer}
+.ox .count{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted)}
+.ox .scroll{max-height:34rem;overflow:auto}
+.ox table{width:100%;border-collapse:collapse;font-size:var(--cds-font-size-caption);font-variant-numeric:tabular-nums}
+.ox th{position:sticky;top:0;background:var(--color-panel);text-align:left;font-weight:var(--cds-font-weight-medium);color:var(--color-fg-muted);z-index:1}
+.ox td,.ox th{padding:7px 8px;border-bottom:1px solid var(--color-border-line);vertical-align:top}
+.ox td.num,.ox th.num{text-align:right;white-space:nowrap}
+.ox tr.click{cursor:pointer}
+.ox tr.click:hover td{background:var(--color-bg)}
+.ox .cellbar{display:flex;align-items:center;gap:8px;justify-content:flex-end}
+.ox .cellbar i{display:block;height:8px;border-radius:4px;background:var(--cds-chart-muted);flex:0 0 auto}
+.ox .vezes{display:inline-block;min-width:1.6rem;text-align:center;border-radius:999px;padding:1px 6px;font-weight:600}
+.ox a{color:inherit}
+.ox .fail{display:flex;align-items:center;justify-content:center;gap:8px;min-height:120px;color:var(--color-fg-muted);font-size:var(--cds-font-size-caption)}
+.ox .fail::before{content:"";width:.375rem;height:.375rem;border-radius:50%;background:var(--color-bad)}
+.ox [data-dash-source-state=empty]{color:transparent}
+.ox [data-dash-source-state=refreshing]{opacity:.5;transition:opacity var(--cds-dur-slow)}
+.ox .method{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);line-height:1.55;margin:0;padding-left:1.1rem}
+@media (max-width:700px){.ox .hn{display:none}}
+</style>
+</head>
+<body>
+<div id="dash-root">
+<div class="ox">
+  <header id="topo">
+    <h1>Raio-X da OAB · 1ª fase</h1>
+    <p class="lead" id="takeaway">
+      Em <span data-source="resumo" data-field="provas" data-row="0" class="dash-skeleton">—</span> provas (33º ao 47º Exame), a distribuição por matéria é praticamente fixa:
+      o núcleo de Ética + Constitucional, Civil, Processo Civil, Penal e Processo Penal vale
+      <strong><span data-source="resumo" data-field="nucleo" data-row="0" class="dash-skeleton">—</span> das 80 questões</strong>.
+      O que muda de prova para prova são os tópicos. O mais cobrado é
+      <strong><span data-source="topicos" data-field="topico" data-row="0" class="dash-skeleton">—</span></strong>
+      (<span data-source="topicos" data-field="materia" data-row="0">—</span>), com
+      <span data-source="topicos" data-field="questoes" data-row="0">—</span> questões.
+    </p>
+  </header>
+
+  <div class="kpis" id="kpis">
+    <div class="card kpi"><div class="lbl">Provas analisadas</div><div class="v dash-skeleton" data-source="resumo" data-field="provas" data-row="0">—</div><div class="lbl">33º ao 47º Exame (out/2021 a set/2026)</div></div>
+    <div class="card kpi"><div class="lbl">Questões classificadas</div><div class="v dash-skeleton" data-source="resumo" data-field="questoes" data-row="0">—</div><div class="lbl">cada uma por matéria, tópico e assunto</div></div>
+    <div class="card kpi"><div class="lbl">Núcleo pesado, por prova</div><div class="v dash-skeleton" data-source="resumo" data-field="nucleo" data-row="0">—</div><div class="lbl">Ética + 5 matérias com 6 questões</div></div>
+    <div class="card kpi"><div class="lbl">Núcleo + bloco médio</div><div class="v dash-skeleton" data-source="resumo" data-field="nucleo_medio" data-row="0">—</div><div class="lbl">de 80 questões; são precisos 40 acertos</div></div>
+    <div class="card kpi"><div class="lbl">Questões anuladas</div><div class="v dash-skeleton" data-source="resumo" data-field="anuladas" data-row="0">—</div><div class="lbl">contam como acerto para todos</div></div>
+  </div>
+
+  <section class="sec" id="materias">
+    <h2>1. Peso de cada matéria</h2>
+    <p>A FGV não muda a quantidade por matéria. Desde o 38º Exame, quando entraram Eleitoral, Financeiro e Previdenciário, a prova tem 20 matérias, e cinco delas perderam uma questão.</p>
+    <div class="grid">
+      <div class="card" id="card-peso">
+        <h3>Questões por prova no formato atual</h3>
+        <p class="note">Formato válido do 38º Exame em diante. Passe o mouse sobre uma barra para ver o total nas 15 provas.</p>
+        <div class="legend" data-source="materias" id="lg-grupos"></div>
+        <div class="chart dash-skeleton" id="ch-materias" data-source="materias"></div>
+      </div>
+      <div class="card" id="card-heat">
+        <h3>Questões por matéria em cada prova</h3>
+        <p class="note">Cada célula é uma prova. A linha tracejada marca o 38º Exame, o primeiro com 20 matérias.</p>
+        <div class="chart dash-skeleton" id="ch-heat" data-source="materia_exame"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="topicos">
+    <h2>2. Tópicos que mais caem</h2>
+    <p>Mostra quantas questões cada tópico teve nas 15 provas e em quantas provas ele apareceu pelo menos uma vez. Um tópico que caiu em 12 de 15 provas é quase garantido. Clique numa linha para ver as questões dele no banco, mais abaixo.</p>
+    <div class="card" id="card-topicos">
+      <div class="controls">
+        <select id="sel-materia" aria-label="Matéria" data-source="materias"></select>
+        <span class="count" id="topicos-nota"></span>
+      </div>
+      <div class="scroll">
+        <table id="tb-topicos" data-source="topicos" data-row-key="materia,topico">
+          <thead><tr>
+            <th data-field="materia" class="hn">Matéria</th>
+            <th data-field="topico">Tópico</th>
+            <th data-field="questoes" class="num">Questões (15 provas)</th>
+            <th data-field="provas_com" class="num">Provas em que caiu</th>
+            <th data-field="freq" class="num hn">% das provas</th>
+            <th data-field="ultimas5" class="num">Nas últimas 5</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="repetecos">
+    <h2>3. Temas que se repetem quase iguais</h2>
+    <p>Pontos específicos que a FGV cobrou de novo, muitas vezes com o mesmo enunciado. São revisões de alto retorno: pouco conteúdo e questão provável.</p>
+    <div class="card">
+      <div class="scroll">
+        <table id="tb-rep" data-source="repetecos" data-row-key="tema">
+          <thead><tr>
+            <th data-field="vezes" class="num">Vezes</th>
+            <th data-field="tema">Tema</th>
+            <th data-field="materia" class="hn">Matéria</th>
+            <th data-field="exames">Exames em que caiu</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="normas">
+    <h2>4. Onde está a resposta</h2>
+    <div class="card">
+      <h3>Diplomas mais usados nas questões</h3>
+      <p class="note">Norma principal de cada questão, somada nas 15 provas. É um bom guia de leitura de lei seca.</p>
+      <div class="chart dash-skeleton" id="ch-normas" data-source="normas"></div>
+    </div>
+  </section>
+
+  <section class="sec" id="banco">
+    <h2>5. Banco das 1.200 questões</h2>
+    <p>Cada questão com prova, número no caderno Tipo 1, matéria, tópico, assunto e norma. Filtre pela matéria, pelo tópico clicado acima ou digite um termo, como “LGPD”, “recurso adesivo” ou “art. 7º”.</p>
+    <div class="card">
+      <div class="controls">
+        <select id="sel-materia-b" aria-label="Matéria" data-source="materias"></select>
+        <button class="chip" id="chip-topico" hidden></button>
+        <input type="search" id="busca" placeholder="Buscar assunto, tópico ou lei" aria-label="Buscar">
+        <span class="count" id="banco-count"></span>
+      </div>
+      <div class="scroll">
+        <table id="tb-q" data-source="questoes" data-row-key="id">
+          <thead><tr>
+            <th data-field="exame" class="num">Prova</th>
+            <th data-field="n" class="num">Nº</th>
+            <th data-field="materia" class="hn">Matéria</th>
+            <th data-field="topico" class="hn">Tópico</th>
+            <th data-field="assunto">Assunto cobrado</th>
+            <th data-field="lei" class="hn">Norma</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="metodo">
+    <h2>Como foi feito</h2>
+    <div class="grid">
+      <div class="card">
+        <ul class="method">
+          <li>Usei os cadernos oficiais Tipo 1 (Branca) das 15 provas mais recentes, do 33º ao 47º Exame. Quando o PDF não podia ser lido inteiro, as últimas questões foram conferidas em repositórios que seguem a numeração do Tipo 1 (LegJur, Jurisway, Estratégia).</li>
+          <li>A matéria de cada questão segue a posição oficial no caderno. Tópico e assunto foram classificados pelo conteúdo, numa taxonomia única para as 15 provas.</li>
+          <li>A norma indicada é a principal da questão. Em parte das questões ela foi deduzida do enunciado, então use-a como guia, não como gabarito.</li>
+          <li>Questões anuladas continuam no levantamento, porque mostram o que a banca quis cobrar.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Provas usadas</h3>
+        <div class="scroll" style="max-height:18rem">
+          <table id="tb-provas" data-source="provas" data-row-key="exame">
+            <thead><tr><th data-field="exame" class="num">Exame</th><th data-field="data">Data</th><th data-field="formato">Formato</th><th data-field="caderno">Caderno</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<footer class="site">Levantamento feito em outubro de 2026 a partir dos cadernos oficiais Tipo 1 do 33º ao 47º Exame de Ordem Unificado (FGV/OAB). Material de estudo independente, sem vínculo com a OAB ou a FGV.</footer>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="assets/dash.js"></script>
+<script>
+(() => {
+  const $ = (s) => document.querySelector(s);
+  const nf = new Intl.NumberFormat('pt-BR');
+  const pf = new Intl.NumberFormat('pt-BR', { style: 'percent', maximumFractionDigits: 0 });
+  const GRUPOS = ['Núcleo pesado (≥6 q.)', 'Bloco médio (4–5 q.)', 'Matérias de 2 q.'];
+  const gcolor = (g) => dash.colors[Math.max(0, GRUPOS.indexOf(g))];
+  let busca = '';
+
+  dash.calc('resumo', {
+    title: 'Resumo das 15 provas',
+    description: 'Conta provas, questões e anuladas; soma as questões por prova do núcleo pesado e do bloco médio.',
+    inputs: ['materias', 'questoes', 'provas'],
+    fn: (materias, questoes, provas) => {
+      const soma = (g) => materias.filter((m) => m.grupo === g).reduce((s, m) => s + Number(m.questoes_por_prova), 0);
+      const nucleo = soma('Núcleo pesado (≥6 q.)');
+      return [{
+        provas: provas.length,
+        questoes: questoes.length,
+        anuladas: questoes.filter((q) => q.anulada === true || q.anulada === 'true').length,
+        nucleo,
+        nucleo_medio: nucleo + soma('Bloco médio (4–5 q.)'),
+      }];
+    },
+  });
+
+  // ---------- helpers
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+  function failed(box, st) {
+    box.querySelectorAll(':scope > svg, :scope > .fail').forEach((n) => n.remove());
+    if (st === 'loading') { box.classList.add('dash-skeleton'); return true; }
+    box.classList.remove('dash-skeleton');
+    if (st !== 'ok') { box.appendChild(el('div', 'fail', 'Failed to load')); return true; }
+    return false;
+  }
+  function tip(box) {
+    let t = box.querySelector(':scope > .tip');
+    if (!t) { t = el('div', 'tip'); t.hidden = true; box.appendChild(t); }
+    return t;
+  }
+  function showTip(box, ev, lines) {
+    const t = tip(box);
+    t.replaceChildren(...lines.map((l, i) => el('div', i === 0 ? 'th' : '', l)));
+    t.hidden = false;
+    const r = box.getBoundingClientRect();
+    let x = ev.clientX - r.left + 14, y = ev.clientY - r.top + 14;
+    if (x + t.offsetWidth > r.width) x = Math.max(0, ev.clientX - r.left - t.offsetWidth - 14);
+    t.style.left = x + 'px'; t.style.top = y + 'px';
+  }
+  const hideTip = (box) => { const t = box.querySelector(':scope > .tip'); if (t) t.hidden = true; };
+  function measure(svg, texts, size) {
+    const g = svg.append('g'); let w = 0;
+    texts.forEach((s) => { const t = g.append('text').attr('font-size', size).text(s); w = Math.max(w, t.node().getComputedTextLength()); });
+    g.remove(); return w;
+  }
+
+  function hbars(box, rows, { label, value, color, tipLines, fmt = nf.format, max }) {
+    const W = Math.max(260, box.clientWidth), bh = 22, gap = 6, H = rows.length * (bh + gap);
+    const svg = d3.select(box).insert('svg', ':first-child').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img');
+    let lw = Math.min(measure(svg, rows.map(label), 12), W * 0.48);
+    const vw = measure(svg, rows.map((r) => fmt(value(r))), 12);
+    const x = d3.scaleLinear([0, max ?? d3.max(rows, value)], [0, W - lw - 16 - vw - 6]);
+    rows.forEach((r, i) => {
+      const g = svg.append('g').attr('transform', `translate(0,${i * (bh + gap)})`);
+      g.append('text').attr('x', lw).attr('y', bh / 2).attr('dy', '0.35em').attr('text-anchor', 'end').attr('font-size', 12).attr('fill', 'var(--color-fg)').text(label(r));
+      const w = Math.max(2, x(value(r)));
+      const bar = g.append('rect').attr('x', lw + 8).attr('y', 3).attr('height', bh - 6).attr('width', w).attr('rx', 4).attr('fill', color(r));
+      g.append('text').attr('x', lw + 8 + w + 6).attr('y', bh / 2).attr('dy', '0.35em').attr('font-size', 12).attr('fill', 'var(--color-fg-muted)').text(fmt(value(r)));
+      g.append('rect').attr('x', 0).attr('y', 0).attr('width', W).attr('height', bh).attr('fill', 'transparent')
+        .on('mousemove', (ev) => { bar.attr('opacity', 0.75); showTip(box, ev, tipLines(r)); })
+        .on('mouseleave', () => { bar.attr('opacity', 1); hideTip(box); });
+    });
+  }
+
+  // ---------- 1. matérias
+  function drawMaterias() {
+    const box = $('#ch-materias'), d = dash.data('materias'), lg = $('#lg-grupos');
+    lg.replaceChildren();
+    if (failed(box, d.status)) return;
+    GRUPOS.forEach((g) => { const s = el('span'); const i = el('i'); i.style.background = gcolor(g); s.append(i, document.createTextNode(g)); lg.appendChild(s); });
+    const rows = [...d.data].sort((a, b) => b.questoes_por_prova - a.questoes_por_prova || a.materia.localeCompare(b.materia, 'pt'));
+    hbars(box, rows, {
+      label: (r) => r.materia, value: (r) => Number(r.questoes_por_prova), color: (r) => gcolor(r.grupo), max: 8,
+      tipLines: (r) => [r.materia, `${nf.format(r.questoes_por_prova)} questões por prova (${pf.format(r.pct_prova)} da prova)`, `${nf.format(r.total_15)} questões nas 15 provas`],
+    });
+  }
+
+  function drawHeat() {
+    const box = $('#ch-heat'), d = dash.data('materia_exame');
+    if (failed(box, d.status)) return;
+    const rows = d.data;
+    const mats = [...new Set(rows.map((r) => r.materia))];
+    const exs = [...new Set(rows.map((r) => Number(r.exame)))].sort((a, b) => a - b);
+    const W = Math.max(280, box.clientWidth);
+    const svg0 = d3.select(box).insert('svg', ':first-child');
+    const lw = Math.min(measure(svg0, mats, 11), W * 0.42);
+    const top = 22, ch = 19, cw = (W - lw - 10) / exs.length, H = top + mats.length * ch + 4;
+    const svg = svg0.attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img');
+    const x0 = lw + 10;
+    const step = cw >= 22 ? 1 : 2;
+    exs.forEach((e, j) => { if (j % step === 0 || e === exs[exs.length - 1]) svg.append('text').attr('x', x0 + j * cw + cw / 2).attr('y', 14).attr('text-anchor', 'middle').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text(e + 'º'); });
+    const idx = new Map(rows.map((r) => [r.materia + '|' + r.exame, Number(r.questoes)]));
+    mats.forEach((m, i) => {
+      const y = top + i * ch;
+      svg.append('text').attr('x', lw).attr('y', y + ch / 2).attr('dy', '0.35em').attr('text-anchor', 'end').attr('font-size', 11).attr('fill', 'var(--color-fg)').text(m);
+      exs.forEach((e, j) => {
+        const v = idx.get(m + '|' + e) ?? 0;
+        const g = svg.append('g');
+        const cell = g.append('rect').attr('x', x0 + j * cw + 1).attr('y', y + 1).attr('width', Math.max(1, cw - 2)).attr('height', ch - 2).attr('rx', 3)
+          .attr('fill', v ? dash.colors[0] : 'var(--cds-chart-grid)').attr('fill-opacity', v ? 0.12 + 0.8 * v / 8 : 0.6);
+        if (cw >= 15) g.append('text').attr('x', x0 + j * cw + cw / 2).attr('y', y + ch / 2).attr('dy', '0.35em').attr('text-anchor', 'middle').attr('font-size', 10)
+          .attr('fill', v >= 5 ? 'var(--color-bg)' : 'var(--color-fg-muted)').attr('pointer-events', 'none').text(v || '–');
+        cell.on('mousemove', (ev) => { cell.attr('stroke', 'var(--color-fg)'); showTip(box, ev, [`${e}º Exame`, m, `${v} ${v === 1 ? 'questão' : 'questões'}`]); })
+            .on('mouseleave', () => { cell.attr('stroke', null); hideTip(box); });
+      });
+    });
+    const j38 = exs.indexOf(38);
+    if (j38 > 0) svg.append('line').attr('x1', x0 + j38 * cw).attr('x2', x0 + j38 * cw).attr('y1', top - 2).attr('y2', H).attr('stroke', 'var(--cds-chart-reference)').attr('stroke-dasharray', '4 3').attr('pointer-events', 'none');
+  }
+
+  // ---------- selects (shared filter)
+  function fillSelect(sel) {
+    const d = dash.data('materias');
+    const ms = d.status === 'ok' ? [...d.data].map((r) => r.materia).sort((a, b) => a.localeCompare(b, 'pt')) : [];
+    sel.replaceChildren(new Option('Todas as matérias', ''), ...ms.map((m) => new Option(m, m)));
+    sel.value = dash.params().materia ?? '';
+  }
+  ['#sel-materia', '#sel-materia-b'].forEach((s) => $(s).addEventListener('change', (ev) => dash.setParams({ materia: ev.target.value || null, topico: null })));
+
+  // ---------- 2. tópicos
+  function drawTopicos() {
+    const d = dash.data('topicos'), tb = $('#tb-topicos tbody');
+    tb.replaceChildren();
+    if (d.status !== 'ok') return;
+    const mat = dash.params().materia || '';
+    const rows = mat ? d.data.filter((r) => r.materia === mat) : d.data.slice(0, 30);
+    $('#topicos-nota').textContent = mat ? `Todos os ${rows.length} tópicos de ${mat}` : 'Os 30 tópicos com mais questões em todas as matérias';
+    const max = d3.max(rows, (r) => Number(r.questoes)) || 1;
+    const picked = dash.params().topico;
+    rows.forEach((r) => {
+      const tr = el('tr', 'click');
+      tr.dataset.key = encodeURIComponent(r.materia) + ',' + encodeURIComponent(r.topico);
+      if (picked === r.materia + '|' + r.topico) tr.style.fontWeight = '600';
+      const bar = el('td', 'num'); const wrap = el('div', 'cellbar'); const i = el('i');
+      i.style.width = Math.round(70 * Number(r.questoes) / max) + 'px';
+      i.style.background = Number(r.freq) >= 0.66 ? dash.colors[0] : 'var(--cds-chart-muted)';
+      wrap.append(i, el('span', '', nf.format(r.questoes))); bar.appendChild(wrap);
+      tr.append(el('td', 'hn', r.materia), el('td', '', r.topico), bar,
+        el('td', 'num', nf.format(r.provas_com)), el('td', 'num hn', pf.format(r.freq)), el('td', 'num', nf.format(r.ultimas5)));
+      tr.addEventListener('click', () => { dash.setParams({ topico: r.materia + '|' + r.topico, materia: r.materia }); document.getElementById('banco').scrollIntoView({ behavior: 'smooth' }); });
+      tb.appendChild(tr);
+    });
+  }
+
+  // ---------- 3. repetecos
+  function drawRep() {
+    const d = dash.data('repetecos'), tb = $('#tb-rep tbody');
+    tb.replaceChildren();
+    if (d.status !== 'ok') return;
+    d.data.forEach((r) => {
+      const tr = el('tr'); tr.dataset.key = r.tema;
+      const v = el('td', 'num'); const b = el('span', 'vezes', nf.format(r.vezes));
+      b.style.background = Number(r.vezes) >= 4 ? dash.colors[0] : 'var(--cds-chart-grid)';
+      b.style.color = Number(r.vezes) >= 4 ? 'var(--color-bg)' : 'var(--color-fg)';
+      v.appendChild(b);
+      tr.append(v, el('td', '', r.tema), el('td', 'hn', r.materia), el('td', '', r.exames));
+      tb.appendChild(tr);
+    });
+  }
+
+  // ---------- 4. normas
+  function drawNormas() {
+    const box = $('#ch-normas'), d = dash.data('normas');
+    if (failed(box, d.status)) return;
+    const rows = d.data.slice(0, 14);
+    hbars(box, rows, {
+      label: (r) => r.norma, value: (r) => Number(r.questoes), color: (r, i) => dash.colors[1],
+      tipLines: (r) => [r.norma, `${nf.format(r.questoes)} questões nas 15 provas`, `≈ ${nf.format(Math.round(r.questoes / 15 * 10) / 10)} por prova`],
+    });
+  }
+
+  // ---------- 5. banco
+  const chip = $('#chip-topico');
+  chip.addEventListener('click', () => dash.setParams({ topico: null }));
+  const busc = $('#busca');
+  busc.addEventListener('input', () => { busca = busc.value.trim().toLowerCase(); drawBanco(); });
+  const norm = (s) => String(s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  function drawBanco() {
+    const d = dash.data('questoes'), tb = $('#tb-q tbody');
+    tb.replaceChildren();
+    const p = dash.params();
+    chip.hidden = !p.topico;
+    chip.textContent = p.topico ? 'Tópico: ' + p.topico.split('|')[1] + ' ×' : '';
+    if (d.status !== 'ok') { $('#banco-count').textContent = ''; return; }
+    const q = norm(busca);
+    const rows = d.data.filter((r) => (!p.materia || r.materia === p.materia)
+      && (!p.topico || r.materia + '|' + r.topico === p.topico)
+      && (!q || norm(r.assunto + ' ' + r.topico + ' ' + r.lei + ' ' + r.materia).includes(q)));
+    $('#banco-count').textContent = `${nf.format(rows.length)} ${rows.length === 1 ? 'questão' : 'questões'}`;
+    const frag = document.createDocumentFragment();
+    rows.forEach((r) => {
+      const tr = el('tr'); tr.dataset.key = r.id;
+      const a = el('td', '', r.assunto);
+      if (r.anulada === true || r.anulada === 'true') a.style.textDecoration = 'line-through';
+      tr.append(el('td', 'num', r.exame + 'º'), el('td', 'num', String(r.n)), el('td', 'hn', r.materia), el('td', 'hn', r.topico), a, el('td', 'hn', r.lei));
+      frag.appendChild(tr);
+    });
+    tb.appendChild(frag);
+  }
+
+  // ---------- provas
+  function drawProvas() {
+    const d = dash.data('provas'), tb = $('#tb-provas tbody');
+    tb.replaceChildren();
+    if (d.status !== 'ok') return;
+    [...d.data].sort((a, b) => b.exame - a.exame).forEach((r) => {
+      const tr = el('tr'); tr.dataset.key = String(r.exame);
+      const dt = r.data ? r.data.slice(8, 10) + '/' + r.data.slice(5, 7) + '/' + r.data.slice(0, 4) : '';
+      const c = el('td'); if (r.caderno) { const a = el('a', '', 'PDF'); a.href = r.caderno; a.target = '_blank'; a.rel = 'noopener'; c.appendChild(a); }
+      tr.append(el('td', 'num', r.exame + 'º'), el('td', '', dt), el('td', '', r.formato), c);
+      tb.appendChild(tr);
+    });
+  }
+
+  dash.onData(() => {
+    const r = dash.data('resumo'), t = dash.data('topicos');
+    document.querySelectorAll('[data-source="resumo"]').forEach((n) => {
+      n.classList.toggle('dash-skeleton', r.status === 'loading');
+      n.textContent = r.status === 'ok' && r.data[0] ? nf.format(r.data[0][n.dataset.field]) : '—';
+    });
+    document.querySelectorAll('#takeaway [data-source="topicos"]').forEach((n) => {
+      n.classList.toggle('dash-skeleton', t.status === 'loading');
+      const v = t.status === 'ok' && t.data[0] ? t.data[0][n.dataset.field] : null;
+      n.textContent = v == null ? '—' : typeof v === 'number' ? nf.format(v) : v;
+    });
+    fillSelect($('#sel-materia')); fillSelect($('#sel-materia-b'));
+    drawMaterias(); drawHeat(); drawTopicos(); drawRep(); drawNormas(); drawBanco(); drawProvas();
+  });
+
+  const named = document.getElementById(location.hash.slice(1));
+  if (named) setTimeout(() => named.scrollIntoView(), 300);
+  const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) dash.setLink(e.target.id); }), { root: document, rootMargin: '-45% 0px -50% 0px' });
+  document.querySelectorAll('.ox > section').forEach((s) => io.observe(s));
+})();
+</script>
+
+</body>
+</html>
